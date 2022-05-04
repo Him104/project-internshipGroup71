@@ -6,10 +6,10 @@ let emailRegex = /^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w{2,3})+$/;
 
 let createIntern = async function (req,res){
     let data = req.body;
-    if(!name)
+    if(!data.name)
     return res.status(400).send({status:false,msg:"Intern name is a required field"})
 
-    if(!email)
+    if(!data.email)
     return res.status(400).send({status:false,msg:"email is a required field"})
 
     if (!emailRegex.test(data.email))
@@ -19,7 +19,7 @@ const usedEmail = await internModel.findOne({email:data.email})
 if(usedEmail)
 return res.status(400).send({ status: false, msg: "Email Id already exists" })
 
-if(!mobile)
+if(!data.mobile)
 return res.status(400).send({ status: false, msg: "mobile is a required field" })
 
 let isValid = mongoose.Types.ObjectId.isValid(data.collegeId)
@@ -27,8 +27,8 @@ let isValid = mongoose.Types.ObjectId.isValid(data.collegeId)
 if (isValid == false) return res.status(400).send({ status: false, msg: "Not a valid college ID" })
 
 let id = req.body.collegeId
-let findCollegeid = await collegeModel.findById(id)
-if(!findCollegeid)
+let findCollegeId = await collegeModel.findById(id)
+if(!findCollegeId)
 
 return res.status(400).send({ status: false, msg: "college Not found. Please enter a valid college id." })
     
