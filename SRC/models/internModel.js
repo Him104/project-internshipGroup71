@@ -16,7 +16,7 @@ let internSchema = mongoose.Schema({
     },
 
     mobile:{
-        type:String,
+        type:Number,
         required:true,
         unique:true
     },
@@ -24,7 +24,7 @@ let internSchema = mongoose.Schema({
     collegeId:{
         type: objectId,
             refs: 'college',
-            required: [true,"college id is required"],
+            required: true
     },
     isDeleted: {
         type: Boolean,
