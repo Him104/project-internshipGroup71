@@ -4,7 +4,7 @@ const objectId = mongoose.Schema.Types.ObjectId;
 let internSchema = mongoose.Schema({ 
     name: {
     type: String,
-    required: true,
+    required: [true, "name is required"],
     trim: true,
     },
     email: {
@@ -16,10 +16,18 @@ let internSchema = mongoose.Schema({
     },
 
     mobile:{
-        type:Number,
+        type:String,
         required:[true, "phone number is required"],
         unique:true,
-        trim:true
+        trim:true,
+        validate:{
+            validator: function(str){
+                return /\d{10}/.test(str)
+            },
+            message:props=>`${props.value} is not a valid phone number!`
+
+        }
+        
     },
 
     collegeId:{

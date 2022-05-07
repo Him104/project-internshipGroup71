@@ -2,6 +2,7 @@ const collegeModel = require("../models/collegeModel")
 const internModel = require("../models/internModel")
 
 let createCollege = async function (req,res){
+    try{
     let data = req.body;
     if(!data.name)
     return res.status(404).send({status:false,msg:"college name is a required field"})
@@ -17,40 +18,49 @@ let createCollege = async function (req,res){
 
 }
 
+catch (err){
+    return res.status(500).send({status:false,msg:err.msg})
+}
+}
+
 // get college details
 
 const collegeDetails = async function(req,res){
+ try{
 
-    let userQuery  = req.query
+    if(req.query.collegeName){
+    let college = await collegeModel.findOne({name:req.query.collegeName,isDeleted:false})
 
-    if(!userQuery)
-    return res.status(400).send({ status: false, message: "No college entered in input field." })
-
-    const collegeName = req.query.collegeName
-    const getCollegeName = await collegeModel.find({name:collegeName,isDeleted:false})
-
-    if(!getCollegeName)
+    if(!college){
 
     return res.status(404).send({ status: false, message: "No such college found" })
+    }
 
-    const getCollegeId = getCollegeName._id;
+    else{
+        let collegeData = {
+            name:college.name,
+            fullName:college.fullName,
+            logoLink:college.logoLink
+        }
+let interns = await internModel.findOne({collegeId:college._id, isDeleted:false})
 
-
-const findIntern = await internModel.find({collegeId:getCollegeId, isDeleted:false}).select({name:1,email:1,mobile:1})
-
-if (findIntern.length===0)
-return res.status(404).send({status:false, message:"No Internship applications"})
-
-const allInterns ={
-    name:getCollegeName.name,
-    fullName:getCollegeName.fullName,
-    logoLink:getCollegeName.logoLink,
-    interests: findIntern
+if (interns)
+{
+collegeData.interns = interns
+    }
+res.status(201).send({ status: true, data: collegeData })
+    }
 }
-res.status(200).send({ status: true, data: allInterns })
-    
-
+else{
+    res.status(400).send({status:false,msg:"college name must be present"})
 }
 
+
+}
+catch (err){
+    return res.status(500).send({status:false,msg:err.msg})
+
+}
+}
 module.exports.collegeDetails=collegeDetails;
 module.exports.createCollege=createCollege;
