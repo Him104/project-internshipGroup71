@@ -38,6 +38,9 @@ const collegeDetails = async function(req,res){
 
 const findIntern = await internModel.find({collegeId:getCollegeId, isDeleted:false}).select({name:1,email:1,mobile:1})
 
+if (findIntern.length===0)
+return res.status(404).send({status:false, message:"No Internship applications"})
+
 const allInterns ={
     name:getCollegeName.name,
     fullName:getCollegeName.fullName,

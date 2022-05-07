@@ -5,14 +5,13 @@ const collegeController = require("../controllers/collegeController")
 //--------------------------------------------------------//
 
 router.get("/test-me", function (req, res) {
-    res.send("My server is running awesome!")
+    res.send("server is up and running on 3000")
 })
 //--------------------------------------------------------//
 
 router.post("/functionup/colleges", collegeController.createCollege)
 router.post ("/functionup/interns", internController.createIntern)
 router.get("/functionup/collegeDetails", collegeController.collegeDetails)
-
 
 
 module.exports = router;

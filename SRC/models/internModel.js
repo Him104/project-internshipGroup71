@@ -17,14 +17,16 @@ let internSchema = mongoose.Schema({
 
     mobile:{
         type:Number,
-        required:true,
-        unique:true
+        required:[true, "phone number is required"],
+        unique:true,
+        trim:true
     },
 
     collegeId:{
         type: objectId,
             refs: 'college',
-            required: true
+            required: [true,"college id is required"],
+            trim:true
     },
     isDeleted: {
         type: Boolean,
